@@ -19,18 +19,10 @@ ASYNCIFY_IMPORTS = src/asyncify_imports.json
 
 OBJ_FILES_DEBUG = \
 	tmp/obj/debug/sqlite3.o tmp/obj/debug/extension-functions.o \
-	tmp/obj/debug/libauthorizer.o \
-	tmp/obj/debug/libfunction.o \
-	tmp/obj/debug/libmodule.o \
-	tmp/obj/debug/libprogress.o \
 	tmp/obj/debug/libvfs.o
 
 OBJ_FILES_DIST = \
 	tmp/obj/dist/sqlite3.o tmp/obj/dist/extension-functions.o \
-	tmp/obj/dist/libauthorizer.o \
-	tmp/obj/dist/libfunction.o \
-	tmp/obj/dist/libmodule.o \
-	tmp/obj/dist/libprogress.o \
 	tmp/obj/dist/libvfs.o
 
 # build options
@@ -66,23 +58,12 @@ EMFLAGS_INTERFACES = \
 	-s EXPORTED_RUNTIME_METHODS=@$(EXPORTED_RUNTIME_METHODS)
 
 EMFLAGS_LIBRARIES = \
-	--js-library src/libauthorizer.js \
-	--js-library src/libfunction.js \
-	--js-library src/libmodule.js \
-	--js-library src/libprogress.js \
 	--js-library src/libvfs.js
 
-EMFLAGS_ASYNCIFY_COMMON = \
-	-s ASYNCIFY \
+EMFLAGS_ASYNCIFY = \
+	-s ASYNCIFY=2 \
+	-s ASYNCIFY_EXPORTS=@src/asyncify_exports.json \
 	-s ASYNCIFY_IMPORTS=@src/asyncify_imports.json
-
-EMFLAGS_ASYNCIFY_DEBUG = \
-	$(EMFLAGS_ASYNCIFY_COMMON) \
-	-s ASYNCIFY_STACK_SIZE=24576
-
-EMFLAGS_ASYNCIFY_DIST = \
-	$(EMFLAGS_ASYNCIFY_COMMON) \
-	-s ASYNCIFY_STACK_SIZE=16384
 
 # https://www.sqlite.org/compile.html
 WASQLITE_DEFINES ?= \
@@ -240,7 +221,7 @@ debug/wa-sqlite-async.mjs: $(OBJ_FILES_DEBUG) $(LIBRARY_FILES) $(EXPORTED_FUNCTI
 	$(EMCC) $(EMFLAGS_DEBUG) \
 	  $(EMFLAGS_INTERFACES) \
 	  $(EMFLAGS_LIBRARIES) \
-	  $(EMFLAGS_ASYNCIFY_DEBUG) \
+	  $(EMFLAGS_ASYNCIFY) \
 	  $(OBJ_FILES_DEBUG) -o $@
 
 ## dist
@@ -263,7 +244,7 @@ dist/wa-sqlite-async.mjs: $(OBJ_FILES_DIST) $(LIBRARY_FILES) $(EXPORTED_FUNCTION
 	$(EMCC) $(EMFLAGS_DIST) \
 	  $(EMFLAGS_INTERFACES) \
 	  $(EMFLAGS_LIBRARIES) \
-	  $(EMFLAGS_ASYNCIFY_DIST) \
+	  $(EMFLAGS_ASYNCIFY) \
 	  $(OBJ_FILES_DIST) -o $@
 
 # dist-xl
@@ -288,5 +269,5 @@ dist-xl/wa-sqlite-async.mjs: deps/$(SQLITE_AMALGAMATION)/sqlite3.c deps/$(EXTENS
 	$(EMCC) $(CFLAGS_DIST) $(WASQLITE_KS_DEFINES) $(EMFLAGS_DIST) \
 	  $(EMFLAGS_INTERFACES) \
 	  $(EMFLAGS_LIBRARIES) \
-	  $(EMFLAGS_ASYNCIFY_DIST) \
+	  $(EMFLAGS_ASYNCIFY) \
 	  $^ -o $@
