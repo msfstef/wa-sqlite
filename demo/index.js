@@ -18,51 +18,57 @@ SELECT * FROM copied LIMIT 5;`.trim();
 
 // Define the selectable configurations.
 const DATABASE_CONFIGS = new Map([
+  // {
+  //   label: 'unix / standard',
+  //   isAsync: false,
+  // },
+  // {
+  //   label: 'Memory / standard',
+  //   isAsync: false,
+  //   vfsModule: '../src/examples/MemoryVFS.js',
+  //   vfsClass: 'MemoryVFS',
+  //   vfsArgs: []
+  // },
+  // {
+  //   label: 'MemoryAsync / asyncify',
+  //   isAsync: true,
+  //   vfsModule: '../src/examples/MemoryAsyncVFS.js',
+  //   vfsClass: 'MemoryAsyncVFS',
+  //   vfsArgs: []
+  // },
+  // {
+  //   label: 'IDBMinimal / asyncify',
+  //   isAsync: true,
+  //   vfsModule: '../src/examples/IDBMinimalVFS.js',
+  //   vfsClass: 'IDBMinimalVFS',
+  //   vfsArgs: ['demo-IDBMinimalVFS']
+  // },
+  // {
+  //   label: 'IDBBatchAtomic / asyncify',
+  //   isAsync: true,
+  //   vfsModule: '../src/examples/IDBBatchAtomicVFS.js',
+  //   vfsClass: 'IDBBatchAtomicVFS',
+  //   vfsArgs: ['demo-IDBBatchAtomicVFS']
+  // },
+  // {
+  //   label: 'OriginPrivateFileSystem / asyncify',
+  //   isAsync: true,
+  //   vfsModule: '../src/examples/OriginPrivateFileSystemVFS.js',
+  //   vfsClass: 'OriginPrivateFileSystemVFS',
+  //   vfsArgs: []
+  // },
+  // {
+  //   label: 'AccessHandlePool / standard',
+  //   isAsync: false,
+  //   vfsModule: '../src/examples/AccessHandlePoolVFS.js',
+  //   vfsClass: 'AccessHandlePoolVFS',
+  //   vfsArgs: ['/demo-AccessHandlePoolVFS']
+  // },
+
   {
-    label: 'unix / standard',
-    isAsync: false,
-  },
-  {
-    label: 'Memory / standard',
-    isAsync: false,
-    vfsModule: '../src/examples/MemoryVFS.js',
-    vfsClass: 'MemoryVFS',
-    vfsArgs: []
-  },
-  {
-    label: 'MemoryAsync / asyncify',
+    label: 'opfs / asyncify',
     isAsync: true,
-    vfsModule: '../src/examples/MemoryAsyncVFS.js',
-    vfsClass: 'MemoryAsyncVFS',
-    vfsArgs: []
-  },
-  {
-    label: 'IDBMinimal / asyncify',
-    isAsync: true,
-    vfsModule: '../src/examples/IDBMinimalVFS.js',
-    vfsClass: 'IDBMinimalVFS',
-    vfsArgs: ['demo-IDBMinimalVFS']
-  },
-  {
-    label: 'IDBBatchAtomic / asyncify',
-    isAsync: true,
-    vfsModule: '../src/examples/IDBBatchAtomicVFS.js',
-    vfsClass: 'IDBBatchAtomicVFS',
-    vfsArgs: ['demo-IDBBatchAtomicVFS']
-  },
-  {
-    label: 'OriginPrivateFileSystem / asyncify',
-    isAsync: true,
-    vfsModule: '../src/examples/OriginPrivateFileSystemVFS.js',
-    vfsClass: 'OriginPrivateFileSystemVFS',
-    vfsArgs: []
-  },
-  {
-    label: 'AccessHandlePool / standard',
-    isAsync: false,
-    vfsModule: '../src/examples/AccessHandlePoolVFS.js',
-    vfsClass: 'AccessHandlePoolVFS',
-    vfsArgs: ['/demo-AccessHandlePoolVFS']
+    dbName: '/demo-opfs'
   }
 ].map(obj => [obj.label, obj]));
 

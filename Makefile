@@ -10,7 +10,7 @@ EXTENSION_FUNCTIONS_SHA3 = ee39ddf5eaa21e1d0ebcbceeab42822dd0c4f82d8039ce173fd48
 
 # source files
 
-LIBRARY_FILES = src/libauthorizer.js src/libfunction.js src/libmodule.js src/libprogress.js src/libvfs.js
+LIBRARY_FILES = src/libopfs.js
 EXPORTED_FUNCTIONS = src/exported_functions.json
 EXPORTED_RUNTIME_METHODS = src/extra_exported_runtime_methods.json
 ASYNCIFY_IMPORTS = src/asyncify_imports.json
@@ -19,11 +19,11 @@ ASYNCIFY_IMPORTS = src/asyncify_imports.json
 
 OBJ_FILES_DEBUG = \
 	tmp/obj/debug/sqlite3.o tmp/obj/debug/extension-functions.o \
-	tmp/obj/debug/libvfs.o
+	tmp/obj/debug/libopfs.o
 
 OBJ_FILES_DIST = \
 	tmp/obj/dist/sqlite3.o tmp/obj/dist/extension-functions.o \
-	tmp/obj/dist/libvfs.o
+	tmp/obj/dist/libopfs.o
 
 # build options
 
@@ -58,7 +58,7 @@ EMFLAGS_INTERFACES = \
 	-s EXPORTED_RUNTIME_METHODS=@$(EXPORTED_RUNTIME_METHODS)
 
 EMFLAGS_LIBRARIES = \
-	--js-library src/libvfs.js
+	--js-library src/libopfs.js
 
 EMFLAGS_ASYNCIFY = \
 	-s ASYNCIFY=2 \
@@ -165,6 +165,10 @@ tmp/obj/debug/libmodule.o: src/libmodule.c
 	mkdir -p tmp/obj/debug
 	$(EMCC) $(CFLAGS_DEBUG) $(WASQLITE_DEFINES) $^ -c -o $@
 
+tmp/obj/debug/libopfs.o: src/libopfs.c
+	mkdir -p tmp/obj/debug
+	$(EMCC) $(CFLAGS_DEBUG) $(WASQLITE_DEFINES) $^ -c -o $@
+
 tmp/obj/debug/libprogress.o: src/libprogress.c
 	mkdir -p tmp/obj/debug
 	$(EMCC) $(CFLAGS_DEBUG) $(WASQLITE_DEFINES) $^ -c -o $@
@@ -193,6 +197,10 @@ tmp/obj/dist/libmodule.o: src/libmodule.c
 	mkdir -p tmp/obj/dist
 	$(EMCC) $(CFLAGS_DIST) $(WASQLITE_DEFINES) $^ -c -o $@
 
+tmp/obj/dist/libopfs.o: src/libopfs.c
+	mkdir -p tmp/obj/dist
+	$(EMCC) $(CFLAGS_DIST) $(WASQLITE_DEFINES) $^ -c -o $@
+
 tmp/obj/dist/libprogress.o: src/libprogress.c
 	mkdir -p tmp/obj/dist
 	$(EMCC) $(CFLAGS_DIST) $(WASQLITE_DEFINES) $^ -c -o $@
@@ -207,7 +215,7 @@ clean-debug:
 	rm -rf debug
 
 .PHONY: debug
-debug: debug/wa-sqlite.mjs debug/wa-sqlite-async.mjs
+debug: debug/wa-sqlite-async.mjs
 
 debug/wa-sqlite.mjs: $(OBJ_FILES_DEBUG) $(LIBRARY_FILES) $(EXPORTED_FUNCTIONS) $(EXPORTED_RUNTIME_METHODS)
 	mkdir -p debug
