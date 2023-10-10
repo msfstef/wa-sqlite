@@ -214,7 +214,7 @@ clean-debug:
 	rm -rf debug
 
 .PHONY: debug
-debug: debug/wa-sqlite-async.mjs
+debug: debug/wa-sqlite.mjs debug/wa-sqlite-async.mjs
 
 debug/wa-sqlite.mjs: $(OBJ_FILES_DEBUG) $(LIBRARY_FILES) $(EXPORTED_FUNCTIONS) $(EXPORTED_RUNTIME_METHODS)
 	mkdir -p debug
