@@ -8,6 +8,8 @@ addToLibrary({
       constructor(path, flags) {
         this.path = path;
         this.flags = flags;
+        this.lockState = 0; // SQLITE_LOCK_NONE
+        this.lockRelease = null;
       }
     };
     File.openFiles = new Map();
@@ -171,7 +173,7 @@ addToLibrary({
     const { File } = opfs_support();
     const f = File.openFiles.get(file);
     console.log('xSync', f?.path, '0x'+flags.toString(16));
-    
+
     f.accessHandle.flush();
     return 0; // SQLITE_OK
   },
@@ -196,31 +198,49 @@ addToLibrary({
     const { File } = opfs_support();
     const f = File.openFiles.get(file);
     console.log('xLock', f?.path, '0x'+flags.toString(16));
-    // TODO
+
+    if (flags && f.lockState === 0) {
+      await new Promise(acquired => {
+        navigator.locks.request(f.path, lock => {
+          acquired();
+          return new Promise(releaser => {
+            f.lockRelease = releaser;
+          });
+        });
+      });
+    }
+    f.lockState = flags;
+
     return 0; // SQLITE_OK
   },
   opfsLock__deps: ['$opfs_support'],
   opfsLock__sig: 'ipi',
   opfsLock__async: true,
 
-  opfsUnlock: async function(file, flags) {
+  opfsUnlock: function(file, flags) {
     // @ts-ignore
     const { File } = opfs_support();
     const f = File.openFiles.get(file);
     console.log('xUnlock', f?.path, '0x'+flags.toString(16));
-    // TODO
+
+    if (!flags && f.lockState !== 0) {
+      f.lockRelease();
+      f.lockRelease = null;
+    }
+    f.lockState = flags;
+
     return 0; // SQLITE_OK
   },
   opfsUnlock__deps: ['$opfs_support'],
   opfsUnlock__sig: 'ipi',
-  opfsUnlock__async: true,
 
   opfsCheckReservedLock: async function(file, pResOut) {
     // @ts-ignore
     const { File } = opfs_support();
     const f = File.openFiles.get(file);
     console.log('xCheckReservedLock', f?.path);
-    // TODO
+
+    setValue(pResOut, 0, 'i32');
     return 0; // SQLITE_OK
   },
   opfsCheckReservedLock__deps: ['$opfs_support'],
