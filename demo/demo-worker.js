@@ -11,7 +11,7 @@ import { ArrayAsyncModule } from "../src/examples/ArrayAsyncModule.js";
 // statically, but we want to be able to select between the Asyncify
 // and non-Asyncify builds so dynamic import is done later.
 const WA_SQLITE = '../dist/wa-sqlite.mjs';
-const WA_SQLITE_ASYNC = '../debug/wa-sqlite-async.mjs';
+const WA_SQLITE_ASYNC = '../dist/wa-sqlite-async.mjs';
 
 /**
  * @typedef Config
